@@ -3,6 +3,8 @@ clear; clc;
 %% === INPUTS === %%
 % DE-1 (Cardinal) %
 mdot = 1.61;    %mdot (kg/s)
+
+t_end = 1.6;    %total burn time (s), without transients
 %Chamber Dimensions%
 r_i = 0.0664866;    %inner radius
 t_w = 0.01;    %wall thickness
@@ -20,9 +22,9 @@ k = 170;    %Thermal conductivity (W/m K)
 sigma_yield = 276e6;    %yield strength, room temperature
 sigma_ultimate = 310e6; %ultimate strength
 
-P_chamber = 3e6;
+P_chamber = 1.5e6;
 
-T_gas = 1820;   %gas temperature (K)
+T_gas = 2000;   %gas temperature (K)
 
 c_star = P_chamber * A_t / mdot;
 
@@ -56,14 +58,15 @@ end
 A_inner = 2 * pi * r_i;
 V_wall = pi * (r_o^2 - r_i^2) * L;
 m_wall = V_wall*rho;
-disp(['Mass of Chamber Wall (kg):',num2str(m_wall)]);
+disp(['Mass of Chamber Wall (kg): ',num2str(m_wall)]);
 C_th = m_wall*c_p;
 
 dTwdt = @(t,Tw) h * A_inner * (T_gas-Tw) / (m_wall*c_p);
 
-t_end = 1.6;    %total burn time (s)
 Tw0 = 300;
 [t,Tw]=ode45(dTwdt, [0,t_end],Tw0);
+
+disp(['Final Wall Temperature (K): ',num2str(Tw(end))]);
 
 figure;
 plot(t,Tw,'-o');
@@ -73,7 +76,44 @@ title('Bartz Output');
 grid on;
 
 %% === HOOP STRESS === %%
-ECF = 0.52;
-sigma = (P_chamber * (r_o^2 + r_i^2) / (r_o^2 - r_i^2));
+function k = knockdown(T)
+
+    T_celcius = T - 273.15;
+
+    % some empirical 6061 aluminum knockdown factor data
+    % Summers, P.T., Chen, Y., Rippe, C.M. et al., https://doi.org/10.1186/s40038-015-0007-5
+    
+    data = [
+        25,    1.0;   
+        100,   0.95;
+        150,   0.93;   
+        200,   0.88;   
+        250,   0.55;  
+        300,   0.31;   
+        350,   0.19;   
+        400,   0.12;   
+        450,   0.05;   
+        500,   0.03;   
+        550,   0.01;  
+        600,   0.005;  
+        650,   0.001;  
+        660,   0.0005; 
+    ];
+
+    k = interp1(data(:,1), data(:,2), T_celcius, 'linear', 'extrap');
+
+    k = max(min(k, 1), 0);
+end
+
+ECF = knockdown(Tw(end));
+
+if t_w / r_i > 0.1 % check if wall thickness is > 10 percent of chamber radius
+    sigma = (P_chamber * (r_o^2 + r_i^2) / (r_o^2 - r_i^2));
+    disp("Thick wall hoop stress used.")
+else
+    sigma = (P_chamber * r_i) / t_w;
+    disp("Thin wall hoop stress used.")
+end
+
 sf = (sigma_yield * ECF) / sigma;
-disp(['Safety Factor:',num2str(sf)]);
+disp(['Safety Factor: ',num2str(sf)]);

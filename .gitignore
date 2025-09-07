@@ -4,4 +4,5 @@
 # ignore swap files
 *.swp
 *.swo
+*.asv
 .DS_Store
