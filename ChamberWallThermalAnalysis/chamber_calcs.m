@@ -20,7 +20,7 @@ k = 170;    %Thermal conductivity (W/m K)
 sigma_yield = 276e6;    %yield strength, room temperature
 sigma_ultimate = 310e6; %ultimate strength
 
-P_chamber = 1.5e6;
+P_chamber = 3e6;
 
 T_gas = 1820;   %gas temperature (K)
 
@@ -56,12 +56,12 @@ end
 A_inner = 2 * pi * r_i;
 V_wall = pi * (r_o^2 - r_i^2) * L;
 m_wall = V_wall*rho;
-disp(m_wall);
+disp(['Mass of Chamber Wall (kg):',num2str(m_wall)]);
 C_th = m_wall*c_p;
 
 dTwdt = @(t,Tw) h * A_inner * (T_gas-Tw) / (m_wall*c_p);
 
-t_end = 2.6;    %total burn time (s)
+t_end = 1.6;    %total burn time (s)
 Tw0 = 300;
 [t,Tw]=ode45(dTwdt, [0,t_end],Tw0);
 
