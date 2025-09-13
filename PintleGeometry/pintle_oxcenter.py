@@ -1,7 +1,6 @@
 # Pintle optimization calculator, modified from the work from PSAS
 
 import math
-from mpmath import *
 import numpy as np
 from matplotlib import pyplot as plt
 

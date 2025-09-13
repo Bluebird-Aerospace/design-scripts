@@ -1,7 +1,6 @@
 # Pintle optimization calculator, modified from the work from PSAS
 
 import math
-from mpmath import *
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -109,14 +108,14 @@ annulus_dynamic_pressure_in = (annulus_rho * annulus_entrance_velocity ** 2 / 2)
 
 pintle_re_1 = (pintle_rho * pintle_entrance_velocity * pintle_entrance_dia) / pintle_dynvisc
 pintle_re_2 = (pintle_rho * pintle_inner_velocity * pintle_inner_dia) / pintle_dynvisc
-pintle_re = (pintle_rho * pintle_exit_velocity * pintle_exit_dia) / pintle_dynvisc
+pintle_re_3 = (pintle_rho * pintle_exit_velocity * pintle_exit_dia) / pintle_dynvisc
 
 annulus_re_1 = (annulus_rho * annulus_entrance_velocity * annulus_entrance_dia) / annulus_dynvisc
 annulus_re_3 = (annulus_rho * annulus_channel_velocity *
                 ((4 * annulus_channel_area) / (2 * annulus_channel_depth + 2 * annulus_channel_width))
                 ) / annulus_dynvisc
 annulus_re_4 = (annulus_rho * annulus_chamber_velocity * annulus_chamber_dia) / annulus_dynvisc
-annulus_re = (annulus_rho * annulus_exit_velocity * annulus_hydrolic_dia) / annulus_dynvisc
+annulus_re_5 = (annulus_rho * annulus_exit_velocity * annulus_hydrolic_dia) / annulus_dynvisc
 
 # Loss coefficents; taken from Fluids textbook
 
@@ -202,7 +201,7 @@ force_ratio = pintle_force2 / annulus_force2
 
 momentum_ratio = pintle_momentum / annulus_momentum
 
-spray_angle = math.acos(1/(1+force_ratio)) * (180/pi)
+spray_angle = math.acos(1/(1+force_ratio)) * (180/math.pi)
 
 print("Pintle V3: Calculated flow values\n")
 print('Pintle calculations if using %s\n' % fluid_pintle)

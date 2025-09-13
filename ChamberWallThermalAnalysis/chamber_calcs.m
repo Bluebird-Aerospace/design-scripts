@@ -117,3 +117,11 @@ end
 
 sf = (sigma_yield * ECF) / sigma;
 disp(['Safety Factor: ',num2str(sf)]);
+
+
+if sf > 1
+    disp('Safety factor is greater than 1. Design is safe.');
+else
+    disp('Design is NOT safe. Please check your specifications and try again');
+end
+
