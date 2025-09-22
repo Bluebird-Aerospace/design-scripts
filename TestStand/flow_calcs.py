@@ -2,6 +2,7 @@
 #Flow calculations for feed system, Charley Z
 #This section uses the Darcy-Weisbach equation for estimation.
 #Should add in two-phase dynamics later on
+#Also, may use the lambert W function to find a higher fidelity solution to Colebrook-White. This may require MATLAB however
 
 #ALL UNITS METRIC
 import math
@@ -57,6 +58,7 @@ print(f"Reynolds number of {oxidizer} flow: {Re_ox} \n")
 
 # Pipe flow calcs
 #Friction factor, oxidizer
+#Colebrook-White equation approximation, Haaland, 1983. See Mechanics of Fluids, Massey, 1989
 f_ox = ( -1.8 * math.log( (6.9/Re_ox) +  (( epsilon / d_pipe_ox ) / 3.7) ** 1.11 ,10) ) ** -2
 print(f"Friction factor of {oxidizer} feed lines: {f_ox} \n")
 
@@ -118,6 +120,7 @@ print(f"Reynolds number of {fuel} flow: {Re_fuel} \n")
 
 # Pipe flow calcs
 #Friction factor, fuel
+#Colebrook-White equation approximation, Haaland, 1983. See Mechanics of Fluids, Massey, 1989
 f_fuel = ( -1.8 * math.log( (6.9/Re_fuel) +  (( epsilon / d_pipe_fuel ) / 3.7) ** 1.11 ,10) ) ** -2
 print(f"Friction factor of {fuel} feed lines: {f_fuel} \n")
 
