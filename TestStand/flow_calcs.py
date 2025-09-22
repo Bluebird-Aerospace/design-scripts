@@ -15,6 +15,9 @@ epsilon = 1.2e-6 #1.2 micrometers
 
 rho_water = CP.PropsSI('D', 'T', 290, 'P', 101325, 'Water')
 
+
+print("-- DARCY-WEISBACH CALCULATION TOOL FOR SYSTEM PRESSURE DROP -- \n")
+
 # OXIDIZER
 oxidizer = 'NitrousOxide'
 T_init_ox = 273.15 #kelvin, initial temperature 
@@ -27,50 +30,49 @@ r_pipe_ox = d_pipe_ox / 2
 L_ox = 0.8 #meters, feed line length of oxidizer
 s_inj_ox = 0.2 #injector stiffness, oxidizer
 
-print(f"OXIDIZER {oxidizer}")
+print(f"OXIDIZER {oxidizer} \n")
 
 dP_inj_ox = pc * s_inj_ox #∆p over injector, oxidizer
-print(f"Pressure drop in injector, {oxidizer} side: {dP_inj_ox} Pa")
+print(f"Pressure drop in injector, {oxidizer} side: {dP_inj_ox} Pa \n")
 
 #standard gravity, oxidizer
 sg_ox = rho_ox / rho_water
-print(f"Standard gravity of {oxidizer}: {sg_ox}")
+print(f"Standard gravity of {oxidizer}: {sg_ox} \n")
 
 #volumetric flow rate, oxidizer
 q_ox = mdot_ox / rho_ox
-print(f"Volumetric flow rate of {oxidizer}: {q_ox} m^3/s")
+print(f"Volumetric flow rate of {oxidizer}: {q_ox} m^3/s \n")
 
 #average velocity, oxidizer
 v_ox = q_ox / (math.pi * (r_pipe_ox ** 2))
-print(f"Average flow velocity of {oxidizer}: {v_ox} m/s")
+print(f"Average flow velocity of {oxidizer}: {v_ox} m/s \n")
 
 #kinematic viscosity, oxidizer
 nu_ox = mu_ox / rho_ox
-print(f"Kinematic viscosity of {oxidizer}: {nu_ox} m^2/s")
+print(f"Kinematic viscosity of {oxidizer}: {nu_ox} m^2/s \n")
 
 #Reynolds number, oxidizer
 Re_ox = (v_ox * d_pipe_ox) / (nu_ox)
-print(f"Reynolds number of {oxidizer} flow: {Re_ox}")
+print(f"Reynolds number of {oxidizer} flow: {Re_ox} \n")
 
 # Pipe flow calcs
 #Friction factor, oxidizer
 f_ox = ( -1.8 * math.log( (6.9/Re_ox) +  (( epsilon / d_pipe_ox ) / 3.7) ** 1.11 ,10) ) ** -2
-print(f"Friction factor of {oxidizer} feed lines: {f_ox}")
+print(f"Friction factor of {oxidizer} feed lines: {f_ox} \n")
 
 #head loss, oxidizer
 #Darcy-Weisbach
 hf_ox = f_ox * (L_ox / d_pipe_ox) * (v_ox ** 2) / (2 * g)
-print(f"Head loss in {oxidizer} feed lines: {hf_ox} m")
+print(f"Head loss in {oxidizer} feed lines: {hf_ox} m \n")
 
 #line pressure drop
 dP_line_ox = hf_ox * rho_ox * g
-print(f"Pressure drop in {oxidizer} line: {dP_line_ox} Pa")
+print(f"Pressure drop in {oxidizer} line: {dP_line_ox} Pa \n")
 
 # Valve flow calcs
 gpm_ox = q_ox * 15850.323140625 #convert to gallons per minute to use the NASA formula
 dP_valve_ox = (sg_ox * (gpm_ox **2)) / (cv_ox ** 2)
-
-print(f"Pressure drop over {oxidizer} main valve: {dP_line_ox} Pa")
+print(f"Pressure drop over {oxidizer} main valve: {dP_line_ox} Pa \n")
 
 #Total oxidizer pressure drop
 dP_total_ox = dP_inj_ox + dP_line_ox + dP_valve_ox
