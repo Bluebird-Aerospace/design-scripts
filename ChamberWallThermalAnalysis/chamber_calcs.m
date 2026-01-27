@@ -4,7 +4,7 @@ clear; clc;
 % DE-1 (Cardinal) %
 mdot = 1.61;    %mdot (kg/s)
 
-t_end = 1.6;    %total burn time (s), without transients
+t_end = 2;    %total burn time (s), without transients
 %Chamber Dimensions%
 r_i = 0.0664866;    %inner radius
 t_w = 0.01;    %wall thickness
@@ -24,7 +24,7 @@ sigma_ultimate = 310e6; %ultimate strength
 
 P_chamber = 1.5e6;
 
-T_gas = 2000;   %gas temperature (K)
+T_gas = 1500;   %gas temperature (K)
 
 c_star = P_chamber * A_t / mdot;
 
@@ -114,7 +114,7 @@ else
     sigma = (P_chamber * r_i) / t_w;
     disp("Thin wall hoop stress used.")
 end
-
+disp(sigma_yield * ECF)
 sf = (sigma_yield * ECF) / sigma;
 disp(['Safety Factor: ',num2str(sf)]);
 

@@ -14,7 +14,7 @@ def mHEM(A, rho2, h1, h2, N, Cd=0.66):
         return N * A * Cd * rho2 * np.sqrt(2*(h1 - h2))
 
 
-T1 = -15 # Upstream temperature (C)
+T1 = -16.86 # Upstream temperature (C)
 P2 = 15e5 # Downstream pressure (Pa)
 N = 7 # Number of orrifaces
 
@@ -36,7 +36,7 @@ def plotting(d, T, N, Cd=0.66):
 
 def HEMmassflowrate():
     temps = np.linspace(-20, 32, 500)
-    d = np.linspace(0.1, 2.5, 100) / 1000
+    d = np.linspace(0.1, 4, 100) / 1000
 
 
     plt.figure()
