@@ -6,9 +6,11 @@
 
 #ALL UNITS METRIC
 import math
+import numpy as np
+from scipy.special import lambertw
 import CoolProp.CoolProp as CP
 
-g = 9.81 #m/s^2, Earth
+g = 9.8 #m/s^2, Earth
 
 pc = 15e5 #Pa (15 bars)
 
@@ -16,8 +18,23 @@ epsilon = 1.2e-6 #1.2 micrometers
 
 rho_water = CP.PropsSI('D', 'T', 290, 'P', 101325, 'Water')
 
+## LAMBERT W SOLUTION HELPER
+
+# Josh colebrook white solution
+def colebrook(Re, epsilon, d_pipe):
+    ln10 = math.log(10)
+    
+    a = (epsilon / d_pipe) / 3.7
+    b = 2.51 / Re
+
+    w = (ln10 / (2 * b)) * math.exp((a / (2 * b)) * ln10)
+
+    f = ((2 / ln10) * lambertw(w) - (a / b)) ** -2
+
+    return f.real
 
 print("-- DARCY-WEISBACH CALCULATION TOOL FOR SYSTEM PRESSURE DROP -- \n")
+
 
 # OXIDIZER
 oxidizer = 'NitrousOxide'
@@ -60,7 +77,9 @@ print(f"Reynolds number of {oxidizer} flow: {Re_ox} \n")
 #Friction factor, oxidizer
 #Colebrook-White equation approximation, Haaland, 1983. See Mechanics of Fluids, Massey, 1989
 f_ox = ( -1.8 * math.log( (6.9/Re_ox) +  (( epsilon / d_pipe_ox ) / 3.7) ** 1.11 ,10) ) ** -2
+f_ox_2 = colebrook(Re_ox, epsilon, d_pipe_ox)
 print(f"Friction factor of {oxidizer} feed lines: {f_ox} \n")
+print(f"Exact friction factor of {oxidizer} feed lines: {f_ox_2} \n")
 
 #head loss, oxidizer
 #Darcy-Weisbach
@@ -122,7 +141,9 @@ print(f"Reynolds number of {fuel} flow: {Re_fuel} \n")
 #Friction factor, fuel
 #Colebrook-White equation approximation, Haaland, 1983. See Mechanics of Fluids, Massey, 1989
 f_fuel = ( -1.8 * math.log( (6.9/Re_fuel) +  (( epsilon / d_pipe_fuel ) / 3.7) ** 1.11 ,10) ) ** -2
+f_fuel_2 = colebrook(Re_fuel, epsilon, d_pipe_fuel)
 print(f"Friction factor of {fuel} feed lines: {f_fuel} \n")
+print(f"Exact friction factor of {fuel} feed lines: {f_fuel_2} \n")
 
 #head loss, fuel
 #Darcy-Weisbach

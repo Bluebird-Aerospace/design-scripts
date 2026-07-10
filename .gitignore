@@ -6,3 +6,4 @@
 *.swo
 *.asv
 .DS_Store
+.venv
