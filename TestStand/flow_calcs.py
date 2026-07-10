@@ -76,10 +76,10 @@ print(f"Reynolds number of {oxidizer} flow: {Re_ox} \n")
 # Pipe flow calcs
 #Friction factor, oxidizer
 #Colebrook-White equation approximation, Haaland, 1983. See Mechanics of Fluids, Massey, 1989
-f_ox = ( -1.8 * math.log( (6.9/Re_ox) +  (( epsilon / d_pipe_ox ) / 3.7) ** 1.11 ,10) ) ** -2
-f_ox_2 = colebrook(Re_ox, epsilon, d_pipe_ox)
+f_ox_2 = ( -1.8 * math.log( (6.9/Re_ox) +  (( epsilon / d_pipe_ox ) / 3.7) ** 1.11 ,10) ) ** -2
+f_ox = colebrook(Re_ox, epsilon, d_pipe_ox)
 print(f"Friction factor of {oxidizer} feed lines: {f_ox} \n")
-print(f"Exact friction factor of {oxidizer} feed lines: {f_ox_2} \n")
+print(f"Haaland friction factor of {oxidizer} feed lines: {f_ox_2} \n")
 
 #head loss, oxidizer
 #Darcy-Weisbach
@@ -140,10 +140,10 @@ print(f"Reynolds number of {fuel} flow: {Re_fuel} \n")
 # Pipe flow calcs
 #Friction factor, fuel
 #Colebrook-White equation approximation, Haaland, 1983. See Mechanics of Fluids, Massey, 1989
-f_fuel = ( -1.8 * math.log( (6.9/Re_fuel) +  (( epsilon / d_pipe_fuel ) / 3.7) ** 1.11 ,10) ) ** -2
-f_fuel_2 = colebrook(Re_fuel, epsilon, d_pipe_fuel)
+f_fuel_2 = ( -1.8 * math.log( (6.9/Re_fuel) +  (( epsilon / d_pipe_fuel ) / 3.7) ** 1.11 ,10) ) ** -2
+f_fuel = colebrook(Re_fuel, epsilon, d_pipe_fuel)
 print(f"Friction factor of {fuel} feed lines: {f_fuel} \n")
-print(f"Exact friction factor of {fuel} feed lines: {f_fuel_2} \n")
+print(f"Haaland friction factor of {fuel} feed lines: {f_fuel_2} \n")
 
 #head loss, fuel
 #Darcy-Weisbach
