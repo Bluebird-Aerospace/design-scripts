@@ -10,14 +10,14 @@ import math
 
 A= 0.13587 * 25.4**2
 w= 0.008 *25.4
+max_height = 3/8 * 25.4
+r=0.6925 *25.4/2
+arc=2*r*math.asin (w/(2*r))
+
 def calculateorifices (A):
-   r=0.6925 *25.4/2
-   arc=2*r*math.asin (w/(2*r))
-   max_height = 3/8 * 25.4
    N = math.ceil(A/(2*arc*(max_height-4)))
    top_height= A/(2*N*arc)+4
    bottom_height= A/(2*N*arc)+2.5
-
    print("Top row:", N, "orifices") 
    print("Bottom row:", N, "orifices") 
    print("Top height:", top_height, "mm") 
@@ -39,3 +39,23 @@ top row first 4 mm of height blocked
 bottom 2.5mm of height blocked
 
 top row higher than bottom """
+
+import matplotlib.pyplot as plt
+import numpy as np
+N_values = list(range(10, 71))
+heights = []
+
+for N in N_values:
+    top_height= A/(2*N*arc)+4
+    bottom_height= A/(2*N*arc)+2.5
+    heights.append(max(top_height, bottom_height))
+
+plt.plot(N_values, heights, label="Maximum orifice height")
+plt.axhline(max_height, color="red", linestyle="--", label="Height limit (3/8 in)")
+
+plt.xlabel("Number of Orifices per Row")
+plt.ylabel("Maximum Height (mm)")
+plt.title("Maximum Orifice Height vs. Number of Orifices")
+plt.legend()
+plt.grid()
+plt.show()
