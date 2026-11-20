@@ -17,7 +17,7 @@ def CalcSPI(T, substance, P_chamber, N, d, Cd=0.66):
     m_CPI_vectorized = np.vectorize(m_CPI)
     return m_CPI_vectorized(A(d), D_sat, P_sat, P_chamber, N, Cd), P_sat, D_sat
 
-def SPI_plot(orrifaces=7):
+def SPI_plot(orrifaces=1):
     # Find critical temperature of N2O
     T_critical = CP.PropsSI('Tcrit', 'NitrousOxide') - 273.15
     T_critical -= 0.01
@@ -25,9 +25,9 @@ def SPI_plot(orrifaces=7):
     # Define the subst
     substance = 'NitrousOxide'
     temperatures = np.linspace(-30, T_critical, 2000)    # Ambient temperatures (C)
-    P_chamber = 15e5
+    P_chamber = 3.1*(10**6)
     N = orrifaces
-    d = np.linspace(0.1, 2.5, 100) / 1000
+    d = np.linspace(0.1, 10, 100) / 1000
 
     def plot_masses(T, substance, P_chamber, N, d):
         m, P_sat, D_sat = CalcSPI(T, substance, P_chamber, N, d)
@@ -60,7 +60,7 @@ def SPI_plot(orrifaces=7):
     # Plot horizontal line at 1.36 kg/s
     plt.axhline(1.36, color='r', linestyle='--', label='1.36 kg/s')
     # Annotate horizontal line along the line itself
-    plt.annotate(f'$\\dot{{m}}_{{N_2O}}=1.21134 kg/s$', xy=(0.1, 1.21134), xycoords='data',
+    plt.annotate(f'$\\dot{{m}}_{{N_2O}}=2.6757 kg/s$', xy=(0.1, 2.6757), xycoords='data',
                  ha='left', va='bottom', fontsize=10, color='r')
 
 
@@ -74,10 +74,10 @@ if __name__ == '__main__':
     plt.show()
 
     # plot mass flow rate vs diameter for ambient temperature of 20degC and N = 12 (SPI)
-    temps = -15
-    d = np.linspace(0.1, 2.5, 100) / 1000
-    N = 7
-    Pc = 15e5
+    temps = 15.5
+    d = np.linspace(0.1, 10, 100) / 1000
+    N = 1
+    Pc = 3.1*(10**6)
     m = CalcSPI(temps, 'NitrousOxide', Pc, N, d)[0]
     plt.figure()
     plt.plot(d * 1000, m)

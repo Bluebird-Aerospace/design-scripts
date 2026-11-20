@@ -12,7 +12,7 @@ from SPICalcs import CalcSPI, m_CPI
 
 def NHNEPlot(T, N, kap, Cd, Nom):
     d = np.linspace(0.1, 20, 1000) / 1000
-    Pc = 15e5
+    Pc = 31e5
 
     mNom = Nom
     mHEM = plotting(d, T, N, Cd)  # remove Cd=Cd

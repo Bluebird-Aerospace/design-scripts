@@ -7,6 +7,7 @@ from matplotlib.cm import ScalarMappable
 from matplotlib.colors import Normalize
 from mpl_toolkits.mplot3d import Axes3D
 
+
 def A(d):
     return np.pi * (d / 2) ** 2
 
@@ -14,19 +15,33 @@ def mHEM(A, rho2, h1, h2, N, Cd=0.66):
         return N * A * Cd * rho2 * np.sqrt(2*(h1 - h2))
 
 
-T1 = -16.86 # Upstream temperature (C)
-P2 = 15e5 # Downstream pressure (Pa)
-N = 7 # Number of orrifaces
+T1 = 15.5 # Upstream temperature (C)
+P2 = 31e5 # Downstream pressure (Pa)
+N = 1 # Number of orrifaces
 
-def HEM_CP(T1, P2, subst='NitrousOxide'):
-    h1 = CP.PropsSI('H', 'T', T1 + 273.15, 'Q', 0, subst)
-    s1 = CP.PropsSI('S', 'T', T1 + 273.15, 'Q', 0, subst)
+import CoolProp.CoolProp as CP
 
-    # Find downstream enthalpy for liquid with upstream entropy and downstream pressure
-    h2 = CP.PropsSI('H', 'P', P2, 'S', s1, subst)
 
-    rho2 = CP.PropsSI('D', 'P', P2, 'S', s1, subst)
+def HEM_CP(T1, P2, subst="NitrousOxide"):
+    state = CP.AbstractState("HEOS", subst)
+
+    # 1. Upstream saturated liquid (Q = 0)
+    state.update(CP.QT_INPUTS, 0.0, T1 + 273.15)
+    h1 = state.hmass()
+    s1 = state.smass()
+
+    # 2. Downstream isentropic state (P = P2, s = s1)
+    # Remove the next line if you want standard two-phase HEM flashing
+    state.specify_phase(CP.iphase_supercritical_liquid)
+
+    state.update(CP.PSmass_INPUTS, P2, s1)
+    assert state.phase() == CP.iphase_supercritical_liquid
+
+    h2 = state.hmass()
+    rho2 = state.rhomass()
+
     return h1, h2, rho2
+
 
 def plotting(d, T, N, Cd=0.66):
     h1, h2, rho2 = HEM_CP(T, P2)
@@ -55,7 +70,7 @@ def HEMmassflowrate():
     cbar.set_label('Tank Temperature (C)')
     plt.xlabel('Single Orifice Diameter (mm)')
     plt.ylabel('Mass Flow Rate (kg/s)')
-    plt.title('HEM Model, 7 Orifices')
+    plt.title('HEM Model, 1 Orifices')
     plt.show()
 
 

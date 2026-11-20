@@ -1,0 +1,41 @@
+"""0.008
+0.3
+30% opening
+70% wall
+height of <0.75
+two rows 
+curvature area """
+
+import math
+
+A= 0.13587 * 25.4**2
+w= 0.008 *25.4
+def calculateorifices (A):
+   r=0.6925 *25.4/2
+   arc=2*r*math.asin (w/(2*r))
+   max_height = 3/8 * 25.4
+   N = math.ceil(A/(2*arc*(max_height-4)))
+   top_height= A/(2*N*arc)+4
+   bottom_height= A/(2*N*arc)+2.5
+
+   print("Top row:", N, "orifices") 
+   print("Bottom row:", N, "orifices") 
+   print("Top height:", top_height, "mm") 
+   print("Bottom height:", bottom_height, "mm") 
+
+calculateorifices (A)
+
+
+"""#inner diameter 0.6925in, outer diameter 0.945in, 
+arc lengthblocked by the wall 70% of inner circumference 
+
+planar width 0.008in chord 
+length 
+inner 0.3
+max height/length  7/16 in 
+
+two rows
+top row first 4 mm of height blocked
+bottom 2.5mm of height blocked
+
+top row higher than bottom """
